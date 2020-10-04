@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<ruleset name="Pressmodo PHPCS">
+	<description>Pressmodo PHPCS extended.</description>
+	<config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
+	<rule ref="vendor/wp-coding-standards/wpcs" />
+
+	<exclude-pattern>*/phpunit.xml*</exclude-pattern>
+	<exclude-pattern>*/languages/*</exclude-pattern>
+
+	<!-- Third-party code -->
+	<exclude-pattern>*/bower-components/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!-- Ensure certain file types aren't sniffed -->
+	<exclude-pattern>*\.(css|js)</exclude-pattern>
+
+	<!-- Don't worry about files that don't contain any code -->
+	<rule ref="Internal.NoCodeFound">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Ignore mixed line-endings warnings -->
+	<rule ref="Internal.LineEndings.Mixed">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Internal exceptions (often occur on minified files) -->
+	<rule ref="Internal.Tokenizer.Exception">
+		<severity>0</severity>
+	</rule>
+
+	<!-- For CI, don't fail on warnings -->
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<!-- Enforce doc standards -->
+	<rule ref="WordPress-Docs">
+		<!-- Don't worry about capitolizing long lines -->
+		<exclude name="Generic.Commenting.DocComment.LongNotCapital"/>
+
+		<!-- Dont need to capitalize first letter -->
+		<exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
+	</rule>
+
+	<rule ref="WordPress-Extra">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
+
+		<!-- Forget about file names -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Don't require punctuation after inline comments -->
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+
+		<!-- Allow empty catch statements -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
+
+		<!-- Comment punctuation doesn't matter -->
+		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
+
+		<exclude name="Squiz.Commenting.VariableComment.Missing"/>
+
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!-- Ignore yoda conditions -->
+		<exclude name="WordPress.PHP.YodaConditions" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
+
+	</rule>
+
+	<!-- Sets the minimum supported WP version to 4.7, which is over a year old. -->
+	<config name="minimum_supported_wp_version" value="4.7" />
+
+	<!-- Make missing translator comment a warning. -->
+	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
+		<type>warning</type>
+	</rule>
+
+	<!-- Sometimes we need to override globals -->
+	<rule ref="WordPress.WP.GlobalVariablesOverride.OverrideProhibited">
+		<type>warning</type>
+	</rule>
+
+	<!-- Add in some extra rules from other standards. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Todo"/>
+
+	<!-- Only check the PHP files. -->
+	<arg name="extensions" value="php"/>
+
+	<!-- Set textdomains. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="typedrive"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

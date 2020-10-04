@@ -1,0 +1,55 @@
+{
+	"name"        : "sematico/backyard-framework",
+	"description" : "",
+	"keywords"    : [ "wordpress", "pressmodo", "sematico", "backyard", "framework" ],
+	"homepage"    : "https://backyard.sematico.com",
+	"license"     : "GPL-3.0-or-later",
+	"authors"     : [
+		{
+			"name"     : "Alessandro Tesoro",
+			"email"    : "hello@sematico.com",
+			"homepage" : "https://sematico.com",
+			"role"     : "Founder & MD"
+		}
+	],
+	"support"     : {
+		"issues" : "https://github.com/sematico/backyard-framework/issues"
+	},
+	"autoload"    : {
+		"psr-4" : {
+			"Backyard\\" : "src"
+		}
+	},
+	"autoload-dev": {
+        "psr-4": {
+            "Backyard\\Tests\\": "tests"
+        }
+    },
+	"require": {
+		"php": ">=7.2",
+		"caseyamcl/configula": "^3.1",
+		"illuminate/macroable": "^8.7",
+		"league/container": "^3.3",
+		"symfony/finder": "^5.1",
+		"symfony/http-foundation": "^5.1",
+		"twig/twig": "^3.0"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+		"phpunit/phpunit": "^7.0",
+		"symfony/var-dumper": "^5.1",
+		"wp-coding-standards/wpcs": "dev-master"
+	},
+	"config": {
+		"bin-dir": "bin",
+		"sort-packages": true,
+		"preferred-install": {
+            "*": "dist"
+        }
+	},
+	"scripts": {
+        "test": "bin/phpunit"
+    },
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
