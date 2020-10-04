@@ -8,6 +8,13 @@
 /composer.json        export-ignore
 /composer.lock        export-ignore
 /contributing.md      export-ignore
+/bin                  export-ignore
+/tests                export-ignore
+/.github              export-ignore
+/.travis.yml          export-ignore
+/.phpcs.xml           export-ignore
+/phpunit.xml.dist     export-ignore
+/readme.md            export-ignore
 
 # Handle line endings.
 # See https://help.github.com/articles/dealing-with-line-endings/
