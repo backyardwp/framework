@@ -6,6 +6,7 @@
   </a>
 
   <h3 align="center">Backyard for WordPress</h3>
+  ![tests](https://github.com/backyardwp/framework/workflows/Tests/badge.svg)
 
   <p align="center">
     A modern way of building WordPress plugins.
