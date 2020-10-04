@@ -30,7 +30,7 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
 
-	- name: Start mysql
+    - name: Start mysql
       run: sudo /etc/init.d/mysql start
 
     - name: Install WP Tests
