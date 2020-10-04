@@ -114,4 +114,5 @@ yarn-error.log
 
 .idea
 
-bin
+bin/*
+!bin/install-wp-tests.sh
