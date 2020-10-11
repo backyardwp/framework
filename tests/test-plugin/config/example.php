@@ -1,6 +1,6 @@
 <?php
 
 $config = [
-	'test' => 'value',
+	'test'       => 'value',
 	'views_path' => 'views',
 ];

@@ -59,9 +59,26 @@ class TwigServiceProvider extends AbstractServiceProvider implements BootableSer
 		$path = $container->basePath( $container->config( 'views_path' ) );
 
 		$container
-			->add( 'twig.loader', FilesystemLoader::class )
-			->addArgument( $path );
+			->add( FilesystemLoader::class )
+			->addArgument( $path )
+			->addTag( 'twig.loader' )
+			->setShared();
 
+		$cachePath = trailingslashit( wp_upload_dir()['basedir'] ) . $this->getContainer()->getDirectoryName() . '-twig-cache';
+
+		$this->getContainer()
+			->add( Environment::class )
+			->addArgument( $this->getContainer()->get( FilesystemLoader::class ) )
+			->addArgument(
+				[
+					'cache'       => $cachePath,
+					'auto_reload' => true,
+				]
+			)
+			->addTag( 'twig' )
+			->setShared();
+
+		// Register macros.
 		$container::macro(
 			'createTwigCacheFolder',
 			function() use ( $container ) {
@@ -87,25 +104,9 @@ class TwigServiceProvider extends AbstractServiceProvider implements BootableSer
 	}
 
 	/**
-	 * Register the twig functionality within the plugin.
-	 *
 	 * @return void
 	 */
-	public function register() {
-
-		$cachePath = trailingslashit( wp_upload_dir()['basedir'] ) . $this->getContainer()->getDirectoryName() . '-twig-cache';
-
-		$this->getContainer()
-			->add( 'twig', Environment::class )
-			->addArgument( $this->getContainer()->get( 'twig.loader' ) )
-			->addArgument(
-				[
-					'cache'       => $cachePath,
-					'auto_reload' => true,
-				]
-			);
-
-	}
+	public function register() {}
 
 	/**
 	 * When the plugin is booted, register a new macro.
@@ -121,7 +122,7 @@ class TwigServiceProvider extends AbstractServiceProvider implements BootableSer
 		$this->getContainer()::macro(
 			'twig',
 			function() use ( $instance ) {
-				return $instance->getContainer()->get( 'twig' );
+				return $instance->getContainer()->get( Environment::class );
 			}
 		);
 
