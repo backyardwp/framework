@@ -12,9 +12,12 @@
 namespace Backyard\Forms;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormExtensionInterface;
 use Symfony\Component\Form\FormTypeExtensionInterface;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Backyard framework forms builder powered by Symfony.
@@ -58,6 +61,12 @@ class FormBuilder {
 		if ( ! $this->formFactoryBuilder ) {
 			$this->formFactoryBuilder = Forms::createFormFactoryBuilder();
 		}
+
+		$validator = Validation::createValidatorBuilder()
+			->getValidator();
+
+		$this->formFactoryBuilder->addExtension( new HttpFoundationExtension() );
+		$this->formFactoryBuilder->addExtension( new ValidatorExtension( $validator ) );
 
 		return $this->formFactoryBuilder;
 	}
