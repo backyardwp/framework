@@ -33,8 +33,8 @@ class TestTwig extends \WP_UnitTestCase {
 		$this->assertTrue( $this->plugin->has( 'twig' ) );
 		$this->assertTrue( $this->plugin->has( 'twig.loader' ) );
 
-		$this->assertInstanceOf( Environment::class, $this->plugin->get( 'twig' ) );
-		$this->assertInstanceOf( FilesystemLoader::class, $this->plugin->get( 'twig.loader' ) );
+		$this->assertInstanceOf( Environment::class, $this->plugin->get( Environment::class ) );
+		$this->assertInstanceOf( FilesystemLoader::class, $this->plugin->get( FilesystemLoader::class ) );
 
 	}
 
