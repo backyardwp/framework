@@ -11,6 +11,7 @@
 
 namespace Backyard\Forms;
 
+use Backyard\Forms\Extension\NonceExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -67,6 +68,7 @@ class FormBuilder {
 
 		$this->formFactoryBuilder->addExtension( new HttpFoundationExtension() );
 		$this->formFactoryBuilder->addExtension( new ValidatorExtension( $validator ) );
+		$this->formFactoryBuilder->addExtension( new NonceExtension() );
 
 		return $this->formFactoryBuilder;
 	}
