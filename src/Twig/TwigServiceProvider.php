@@ -13,6 +13,7 @@ namespace Backyard\Twig;
 
 use Backyard\Contracts\BootablePluginProviderInterface;
 use Backyard\Exceptions\MissingConfigurationException;
+use Backyard\Twig\Extensions\NonceFieldsExtension;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
 use Twig\Environment;
@@ -77,6 +78,10 @@ class TwigServiceProvider extends AbstractServiceProvider implements BootableSer
 			)
 			->addTag( 'twig' )
 			->setShared();
+
+		$twig = $this->getContainer()->get( Environment::class );
+
+		$twig->addExtension( new NonceFieldsExtension() );
 
 		// Register macros.
 		$container::macro(

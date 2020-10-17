@@ -11,7 +11,6 @@
 
 namespace Backyard\Forms\Extension;
 
-use Backyard\Nonces\Nonce;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
