@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Backyard\Nonces\Nonce;
+use Backyard\Nonces\NonceFactory;
 
 /**
  * Handles validation of nonces when submitting forms.
@@ -27,15 +28,15 @@ class NonceValidationListener implements EventSubscriberInterface {
 	 *
 	 * @var Nonce
 	 */
-	protected $nonce;
+	protected $nonceSlug;
 
 	/**
 	 * Get things started.
 	 *
-	 * @param Nonce $nonce nonce instance
+	 * @param string $nonceSlug nonce slug.
 	 */
-	public function __construct( Nonce $nonce ) {
-		$this->nonce = $nonce;
+	public function __construct( string $nonceSlug ) {
+		$this->nonceSlug = $nonceSlug;
 	}
 
 	/**
@@ -56,9 +57,14 @@ class NonceValidationListener implements EventSubscriberInterface {
 	 * @return void
 	 */
 	public function preSubmit( FormEvent $event ) {
-		$form = $event->getForm();
 
-		$form->addError( new FormError( 'Nonce error' ) );
+		$form         = $event->getForm();
+		$config       = $form->getConfig();
+		$errorMessage = $config->hasOption( 'nonce_message' ) ? $config->getOption( 'nonce_message' ) : 'Something went wrong, nonce validation has failed. Please try again.';
+
+		if ( ! NonceFactory::verify( $this->nonceSlug ) ) {
+			$form->addError( new FormError( $errorMessage ) );
+		}
 	}
 
 }

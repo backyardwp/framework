@@ -31,7 +31,7 @@ class NonceFormTypeExtension extends AbstractTypeExtension {
 	 */
 	public function buildForm( FormBuilderInterface $builder, array $options ) {
 
-		if ( ! $options['nonce'] || ! $options['nonce'] instanceof Nonce ) {
+		if ( ! $options['nonce'] ) {
 			return;
 		}
 
