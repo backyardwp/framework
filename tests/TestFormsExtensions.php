@@ -11,7 +11,7 @@
 
 namespace Backyard\Tests;
 
-use Backyard\Forms\Extension\NonceExtension;
+use Backyard\Forms\Extensions\Nonce\NonceExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;

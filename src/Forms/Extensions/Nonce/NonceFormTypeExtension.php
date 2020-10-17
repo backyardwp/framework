@@ -9,7 +9,7 @@
  * @link      https://sematico.com
  */
 
-namespace Backyard\Forms\Extension;
+namespace Backyard\Forms\Extensions\Nonce;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

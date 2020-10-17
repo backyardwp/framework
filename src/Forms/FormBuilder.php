@@ -11,7 +11,7 @@
 
 namespace Backyard\Forms;
 
-use Backyard\Forms\Extension\NonceExtension;
+use Backyard\Forms\Extensions\Nonce\NonceExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
