@@ -14,6 +14,7 @@ namespace Backyard\Tests;
 use Backyard\Forms\FormBuilder;
 use Backyard\Forms\FormsServiceProvider;
 use Backyard\Plugin;
+use Backyard\Twig\Extensions\NonceFieldsExtension;
 use Backyard\Twig\TwigServiceProvider;
 use Backyard\Utils\Str;
 use Symfony\Bridge\Twig\Extension\FormExtension;
@@ -50,11 +51,17 @@ class TestForms extends \WP_UnitTestCase {
 
 	public function testTwigHasExtension() {
 		$this->assertTrue( $this->plugin->twig()->hasExtension( FormExtension::class ) );
+		$this->assertTrue( $this->plugin->twig()->hasExtension( NonceFieldsExtension::class ) );
 	}
 
 	public function testPluginCanRenderForm() {
 		$output = $this->plugin->twig()->render( 'form_example.twig', [ 'form' => $this->form->createView() ] );
 		$this->assertTrue( Str::contains( $output, '<form name="form"' ) );
+	}
+
+	public function testTwigCanRenderNonceFields() {
+		$output = $this->plugin->twig()->render( 'nonce.twig' );
+		$this->assertTrue( Str::contains( $output, '<input type="hidden" id="_myslug-nonce"' ) );
 	}
 
 }
