@@ -12,6 +12,7 @@
 namespace Backyard\Forms;
 
 use Backyard\Forms\Extensions\Nonce\NonceExtension;
+use Backyard\Forms\Extensions\Sanitizer\SanitizerExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -69,6 +70,7 @@ class FormBuilder {
 		$this->formFactoryBuilder->addExtension( new HttpFoundationExtension() );
 		$this->formFactoryBuilder->addExtension( new ValidatorExtension( $validator ) );
 		$this->formFactoryBuilder->addExtension( new NonceExtension() );
+		$this->formFactoryBuilder->addExtension( new SanitizerExtension() );
 
 		return $this->formFactoryBuilder;
 	}
