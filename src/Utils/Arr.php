@@ -14,6 +14,7 @@
 namespace Backyard\Utils;
 
 use ArrayAccess;
+use Closure;
 use InvalidArgumentException;
 
 /**
@@ -163,7 +164,7 @@ class Arr {
 	public static function first( $array, callable $callback = null, $default = null ) {
 		if ( is_null( $callback ) ) {
 			if ( empty( $array ) ) {
-				return value( $default );
+				return self::value( $default );
 			}
 
 			foreach ( $array as $item ) {
@@ -177,7 +178,7 @@ class Arr {
 			}
 		}
 
-		return value( $default );
+		return self::value( $default );
 	}
 
 	/**
@@ -190,7 +191,7 @@ class Arr {
 	 */
 	public static function last( $array, callable $callback = null, $default = null ) {
 		if ( is_null( $callback ) ) {
-			return empty( $array ) ? value( $default ) : end( $array );
+			return empty( $array ) ? self::value( $default ) : end( $array );
 		}
 
 		return static::first( array_reverse( $array, true ), $callback, $default );
@@ -272,7 +273,7 @@ class Arr {
 	 */
 	public static function get( $array, $key, $default = null ) {
 		if ( ! static::accessible( $array ) ) {
-			return value( $default );
+			return self::value( $default );
 		}
 
 		if ( is_null( $key ) ) {
@@ -284,14 +285,14 @@ class Arr {
 		}
 
 		if ( strpos( $key, '.' ) === false ) {
-			return $array[ $key ] ?? value( $default );
+			return $array[ $key ] ?? self::value( $default );
 		}
 
 		foreach ( explode( '.', $key ) as $segment ) {
 			if ( static::accessible( $array ) && static::exists( $array, $segment ) ) {
 				$array = $array[ $segment ];
 			} else {
-				return value( $default );
+				return self::value( $default );
 			}
 		}
 
@@ -378,7 +379,7 @@ class Arr {
 		list($value, $key) = static::explodePluckParameters( $value, $key );
 
 		foreach ( $array as $item ) {
-			$itemValue = data_get( $item, $value );
+			$itemValue = self::dataGet( $item, $value );
 
 			// If the key is "null", we will just append the value to the array and keep
 			// looping. Otherwise we will key the array using the value of the key we
@@ -386,7 +387,7 @@ class Arr {
 			if ( is_null( $key ) ) {
 				$results[] = $itemValue;
 			} else {
-				$itemKey = data_get( $item, $key );
+				$itemKey = self::dataGet( $item, $key );
 
 				if ( is_object( $itemKey ) && method_exists( $itemKey, '__toString' ) ) {
 					$itemKey = (string) $itemKey;
@@ -524,18 +525,6 @@ class Arr {
 	}
 
 	/**
-	 * Shuffle the given array and return the result.
-	 *
-	 * @param  array $array
-	 * @return array
-	 */
-	public static function shuffle( $array ) {
-		shuffle( $array );
-
-		return $array;
-	}
-
-	/**
 	 * Recursively sort an array by keys and values.
 	 *
 	 * @param  array $array
@@ -576,6 +565,65 @@ class Arr {
 	 */
 	public static function wrap( $value ) {
 		return ! is_array( $value ) ? [ $value ] : $value;
+	}
+
+	/**
+	 * Return the default value of the given value.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	private static function value( $value ) {
+		return $value instanceof Closure ? $value() : $value;
+	}
+
+	/**
+	 * Set an item on an array or object using dot notation.
+	 *
+	 * @param  mixed        $target
+	 * @param  string|array $key
+	 * @param  mixed        $value
+	 * @param  bool         $overwrite
+	 * @return mixed
+	 */
+	public static function dataGet( $target, $key, $default = null ) {
+		if ( is_null( $key ) ) {
+			return $target;
+		}
+
+		$key = is_array( $key ) ? $key : explode( '.', $key );
+
+		foreach ( $key as $i => $segment ) {
+			unset( $key[ $i ] );
+
+			if ( is_null( $segment ) ) {
+				return $target;
+			}
+
+			if ( $segment === '*' ) {
+				if ( ! is_array( $target ) ) {
+					return self::value( $default );
+				}
+
+				$result = [];
+
+				foreach ( $target as $item ) {
+					$result[] = self::dataGet( $item, $key );
+				}
+
+				return in_array( '*', $key ) ? self::collapse( $result ) : $result;
+			}
+
+			if ( self::accessible( $target ) && self::exists( $target, $segment ) ) {
+				$target = $target[ $segment ];
+			} elseif ( is_object( $target ) && isset( $target->{$segment} ) ) {
+				$target = $target->{$segment};
+			} else {
+				return self::value( $default );
+			}
+		}
+
+		return $target;
 	}
 
 }
