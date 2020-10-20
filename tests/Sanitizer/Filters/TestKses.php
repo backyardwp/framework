@@ -13,7 +13,7 @@ namespace Backyard\Tests\Sanitizer\Filters;
 
 use Backyard\Sanitizer\Sanitizer;
 
-class TestTrim extends \WP_UnitTestCase {
+class TestKses extends \WP_UnitTestCase {
 
 	public function sanitize( $data, $rules ) {
 		$sanitizer = new Sanitizer( $data, $rules );
@@ -21,14 +21,18 @@ class TestTrim extends \WP_UnitTestCase {
 	}
 
 	public function testItCanTrimStrings() {
-		$data  = [
-			'name' => '  Test  ',
+
+		$data = [
+			'name' => '<strong>Test</strong>',
 		];
+
 		$rules = [
-			'name' => 'trim',
+			'name' => 'kses',
 		];
-		$data  = $this->sanitize( $data, $rules );
-		$this->assertEquals( 'Test', $data['name'] );
+
+		$data = $this->sanitize( $data, $rules );
+
+		$this->assertEquals( '<strong>Test</strong>', $data['name'] );
 	}
 
 }

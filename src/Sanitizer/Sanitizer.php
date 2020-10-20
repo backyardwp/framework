@@ -11,7 +11,10 @@
 
 namespace Backyard\Sanitizer;
 
-use Backyard\Sanitizer\Filters\Trim;
+use Backyard\Sanitizer\Filters\FilterIf;
+use Backyard\Sanitizer\Filters\Kses;
+use Backyard\Sanitizer\Filters\SanitizeTextField;
+use Backyard\Sanitizer\Filters\StripTags;
 use Backyard\Utils\Arr;
 use Closure;
 use InvalidArgumentException;
@@ -41,7 +44,10 @@ class Sanitizer {
 	 * @var array
 	 */
 	protected $filters = [
-		'trim' => Trim::class,
+		'strip_tags'          => StripTags::class,
+		'sanitize_text_field' => SanitizeTextField::class,
+		'kses'                => Kses::class,
+		'filter_if'           => FilterIf::class,
 	];
 
 	/**
