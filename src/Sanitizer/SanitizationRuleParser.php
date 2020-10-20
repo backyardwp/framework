@@ -175,7 +175,10 @@ class SanitizationRuleParser {
 	 * @return array
 	 */
 	protected function mergeRulesForAttribute( $results, $attribute, $rules ) {
-		$merge = head( $this->explodeRules( [ $rules ] ) );
+
+		$toMerge = $this->explodeRules( [ $rules ] );
+
+		$merge = reset( $toMerge );
 
 		$results[ $attribute ] = array_merge(
 			isset( $results[ $attribute ] ) ? $this->explodeExplicitRule( $results[ $attribute ] ) : [],
