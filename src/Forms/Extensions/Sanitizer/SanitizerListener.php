@@ -12,7 +12,9 @@
 namespace Backyard\Forms\Extensions\Sanitizer;
 
 use Backyard\Application;
+use Backyard\Sanitizer\Sanitizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -28,7 +30,7 @@ class SanitizerListener implements EventSubscriberInterface {
 	 */
 	public static function getSubscribedEvents() {
 		return [
-			FormEvents::PRE_SUBMIT => 'preSubmit',
+			FormEvents::POST_SUBMIT => 'preSubmit',
 		];
 	}
 
@@ -40,18 +42,38 @@ class SanitizerListener implements EventSubscriberInterface {
 	 */
 	public function preSubmit( FormEvent $event ) {
 
-		$form   = $event->getForm();
-		$data   = $form->getData();
-		$fields = $form->all();
+		$form        = $event->getForm();
+		$data        = $form->getData();
+		$fields      = $form->all();
+		$definitions = $this->getFieldsDefinition( $form, $fields );
+
+		$sanitized = ( new Sanitizer( $data, $definitions ) )->sanitize();
 
 	}
 
-	private function getFieldsDefinition( $fields ) {
+	/**
+	 * Get the sanitization definitions for fields based on their type.
+	 *
+	 * @param [type] $form
+	 * @param [type] $fields
+	 * @return array
+	 */
+	private function getFieldsDefinition( $form, $fields ) {
 
 		$definition = [];
 
 		foreach ( $fields as $field ) {
 
+			$type = $field->getConfig()->getType()->getInnerType();
+
+			switch ( $type ) {
+				case TextType::class:
+					$definition[ $field->getName() ] = [ 'sanitize_text_field' ];
+					break;
+				default:
+					$definition[ $field->getName() ] = [ 'sanitize_text_field' ];
+					break;
+			}
 		}
 
 		return $definition;

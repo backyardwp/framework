@@ -104,7 +104,7 @@ class TestSanitizer extends \WP_UnitTestCase {
 	public function testCanUseClosureAsFilter() {
 
 		$data = [
-			'name' => ' Sina ',
+			'name' => 'Sina',
 		];
 
 		$rules = [
