@@ -30,35 +30,39 @@ class SanitizerListener implements EventSubscriberInterface {
 	 */
 	public static function getSubscribedEvents() {
 		return [
-			FormEvents::POST_SUBMIT => 'preSubmit',
+			FormEvents::SUBMIT => 'onSubmission',
 		];
 	}
 
 	/**
-	 * Handle the nonce validation before submitting the form.
+	 * Handle sanitization when the form is submitted.
 	 *
 	 * @param FormEvent $event
 	 * @return void
 	 */
-	public function preSubmit( FormEvent $event ) {
+	public function onSubmission( FormEvent $event ) {
 
-		$form        = $event->getForm();
-		$data        = $form->getData();
-		$fields      = $form->all();
-		$definitions = $this->getFieldsDefinition( $form, $fields );
+		$form = $event->getForm();
 
-		$sanitized = ( new Sanitizer( $data, $definitions ) )->sanitize();
+		if ( $form->isRoot() ) {
+			$data        = $event->getData();
+			$fields      = $form->all();
+			$definitions = $this->getFieldsDefinition( $fields );
+
+			$sanitized = ( new Sanitizer( $data, $definitions ) )->sanitize();
+
+			$event->setData( $sanitized );
+		}
 
 	}
 
 	/**
 	 * Get the sanitization definitions for fields based on their type.
 	 *
-	 * @param [type] $form
-	 * @param [type] $fields
+	 * @param array $fields
 	 * @return array
 	 */
-	private function getFieldsDefinition( $form, $fields ) {
+	private function getFieldsDefinition( $fields ) {
 
 		$definition = [];
 
