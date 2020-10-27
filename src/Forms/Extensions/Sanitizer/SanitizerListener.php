@@ -11,10 +11,9 @@
 
 namespace Backyard\Forms\Extensions\Sanitizer;
 
-use Backyard\Application;
-use Backyard\Sanitizer\Sanitizer;
+use Backyard\Utils\Sanitizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -45,42 +44,49 @@ class SanitizerListener implements EventSubscriberInterface {
 		$form = $event->getForm();
 
 		if ( $form->isRoot() ) {
-			$data        = $event->getData();
-			$fields      = $form->all();
-			$definitions = $this->getFieldsDefinition( $fields );
+			$data   = $event->getData();
+			$fields = $form->all();
 
-			$sanitized = ( new Sanitizer( $data, $definitions ) )->sanitize();
-
-			$event->setData( $sanitized );
+			$event->setData( $this->sanitizeData( $data, $fields ) );
 		}
 
 	}
 
 	/**
-	 * Get the sanitization definitions for fields based on their type.
+	 * Generate the sanitized array of submitted data.
 	 *
-	 * @param array $fields
+	 * @param array $data data of the form
+	 * @param array $fields fields list
 	 * @return array
 	 */
-	private function getFieldsDefinition( $fields ) {
+	private function sanitizeData( $data, $fields ) {
 
-		$definition = [];
+		$sanitized = [];
+
+		if ( ! is_array( $data ) ) {
+			return $sanitized;
+		}
 
 		foreach ( $fields as $field ) {
+
+			if ( ! array_key_exists( $field->getName(), $data ) ) {
+				continue;
+			}
 
 			$type = $field->getConfig()->getType()->getInnerType();
 
 			switch ( $type ) {
-				case TextType::class:
-					$definition[ $field->getName() ] = [ 'sanitize_text_field' ];
+				case TextareaType::class:
+					$sanitized[ $field->getName() ] = Sanitizer::cleanTextarea( $data[ $field->getName() ] );
 					break;
 				default:
-					$definition[ $field->getName() ] = [ 'sanitize_text_field' ];
+					$sanitized[ $field->getName() ] = Sanitizer::clean( $data[ $field->getName() ] );
 					break;
 			}
+
 		}
 
-		return $definition;
+		return $sanitized;
 
 	}
 
