@@ -73,17 +73,21 @@ class SanitizerListener implements EventSubscriberInterface {
 				continue;
 			}
 
-			$type = $field->getConfig()->getType()->getInnerType();
+			$type   = $field->getConfig()->getType()->getInnerType();
+			$config = $field->getConfig();
 
-			switch ( $type ) {
-				case TextareaType::class:
-					$sanitized[ $field->getName() ] = Sanitizer::cleanTextarea( $data[ $field->getName() ] );
-					break;
-				default:
-					$sanitized[ $field->getName() ] = Sanitizer::clean( $data[ $field->getName() ] );
-					break;
+			if ( $config->hasOption( 'sanitizer' ) && $config->getOption( 'sanitizer' ) === false ) {
+				$sanitized[ $field->getName() ] = $data[ $field->getName() ];
+			} else {
+				switch ( $type ) {
+					case TextareaType::class:
+						$sanitized[ $field->getName() ] = Sanitizer::cleanTextarea( $data[ $field->getName() ] );
+						break;
+					default:
+						$sanitized[ $field->getName() ] = Sanitizer::clean( $data[ $field->getName() ] );
+						break;
+				}
 			}
-
 		}
 
 		return $sanitized;
