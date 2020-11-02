@@ -11,6 +11,7 @@
 
 namespace Backyard\Forms\Extensions\Nonce;
 
+use Backyard\Forms\Types\OptionsType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -55,7 +56,7 @@ class NonceFormTypeExtension extends AbstractTypeExtension {
 	 * {@inheritdoc}
 	 */
 	public static function getExtendedTypes(): iterable {
-		return [ FormType::class ];
+		return [ FormType::class, OptionsType::class ];
 	}
 
 }

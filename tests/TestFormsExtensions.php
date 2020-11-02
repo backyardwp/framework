@@ -96,7 +96,12 @@ class TestFormsExtension extends TypeTestCase {
 			->add( 'child_2', TextType::class, [ 'sanitizer' => false ] )
 			->getForm();
 
-		$form->submit( [ 'child' => '<strong>test</strong>', 'child_2' => '<strong>value</strong>' ] );
+		$form->submit(
+			[
+				'child'   => '<strong>test</strong>',
+				'child_2' => '<strong>value</strong>',
+			]
+		);
 
 		$this->assertSame( $form->getData()['child'], 'test' );
 		$this->assertSame( $form->getData()['child_2'], '<strong>value</strong>' );
