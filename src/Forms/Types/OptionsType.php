@@ -11,10 +11,12 @@
 
 namespace Backyard\Forms\Types;
 
+use Backyard\Forms\OrderedForms;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Admin options form type class.
@@ -35,6 +37,7 @@ class OptionsType extends AbstractType {
 				TextType::class,
 				[
 					'label' => 'Something here',
+					'priority' => 1
 				]
 			);
 	}
