@@ -72,7 +72,7 @@ class FormBuilder {
 		$this->formFactoryBuilder->addExtension( new ValidatorExtension( $validator ) );
 		$this->formFactoryBuilder->addExtension( new NonceExtension() );
 		$this->formFactoryBuilder->addExtension( new SanitizerExtension() );
-		$this->formFactoryBuilder->addExtension( new PriorityExtension() );
+		//$this->formFactoryBuilder->addExtension( new PriorityExtension() );
 
 		return $this->formFactoryBuilder;
 	}
