@@ -104,6 +104,8 @@ class SubMenuPage extends AbstractPage implements AdminSubMenuPageInterface {
 	 */
 	public function setParentPage( AdminMenuPageInterface $page ) {
 		$this->parentPage = $page;
+		$this->setParentSlug( $page->getMenuSlug() );
+
 		return $this;
 	}
 }
