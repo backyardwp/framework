@@ -24,7 +24,7 @@ class RequestFactory {
 	 * @see wp_magic_quotes
 	 * @see stripslashes_deep
 	 *
-	 * @return Request HTTP request.
+	 * @return ServerRequest HTTP request.
 	 */
 	public static function create() {
 
