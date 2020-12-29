@@ -11,6 +11,8 @@
 
 namespace Backyard\Contracts;
 
+use Backyard\Contracts\AlmostControllerInterface;
+
 /**
  * Interface PageInterface represents single admin page in WordPress.
  *
@@ -146,5 +148,20 @@ interface AdminPageInterface {
 	 * @return string The page url.
 	 */
 	public function getURL();
+
+	/**
+	 * Setup the controller that handles rendering and requests for the page.
+	 *
+	 * @param string $controller
+	 * @return $this For chain calls.
+	 */
+	public function setController( string $controller );
+
+	/**
+	 * Returns the instance of the controller set for the page.
+	 *
+	 * @return AlmostControllerInterface
+	 */
+	public function getController();
 
 }

@@ -12,6 +12,9 @@
 namespace Backyard\AdminPages;
 
 use Backyard\Contracts\AdminPageInterface;
+use Backyard\Contracts\AlmostControllerInterface;
+use Backyard\Contracts\RenderableAdminPageControllerInterface;
+use Backyard\Exceptions\NonRenderableException;
 
 /**
  * Base definition of wp-admin menu page.
@@ -42,6 +45,11 @@ abstract class AbstractPage implements AdminPageInterface {
 	 * @var string Page menu slug.
 	 */
 	protected $menuSlug;
+
+	/**
+	 * @var AlmostControllerInterface Controller that handles rendering and requests for the page.
+	 */
+	protected $controller;
 
 	/**
 	 * @inheritdoc
@@ -127,9 +135,32 @@ abstract class AbstractPage implements AdminPageInterface {
 
 	/**
 	 * @inheritdoc
+	 * @throws NonRenderableException When the controller does not support rendering.
+	 */
+	public function setController( string $controller ) {
+		$controller = new $controller();
+
+		if ( ! $controller instanceof RenderableAdminPageControllerInterface ) {
+			throw new NonRenderableException( 'Admin page controller must implement the RenderableAdminPageController interface.' );
+		}
+
+		$this->controller = $controller;
+
+		return $this;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getController() {
+		return $this->controller;
+	}
+
+	/**
+	 * @inheritdoc
 	 */
 	public function render() {
-		$this->getView()->render( $this );
+		$this->getController()->render( $this );
 	}
 
 	/**
