@@ -41,15 +41,6 @@ class SubMenuPage extends AbstractPage implements AdminSubMenuPageInterface {
 			$this->getMenuSlug(),
 			array( $this, 'render' )
 		);
-		if ( $page ) {
-			// All functions attached to actions runs in 2 scenarios:
-			// 1. Particular settings page loaded (load-$page action).
-			// 2. When page settings is saving (admin_action_update action)
-
-			// Fully build the page object
-			add_action( 'load-' . $page, array( $this, 'lateConstruct' ) );
-			add_action( 'admin_action_update', array( $this, 'lateConstruct' ) );
-		}
 
 		return $this;
 	}

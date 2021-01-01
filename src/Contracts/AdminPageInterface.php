@@ -22,25 +22,6 @@ use Backyard\Contracts\AlmostControllerInterface;
 interface AdminPageInterface {
 
 	/**
-	 * Called to late construct the page instance.
-	 *
-	 * Usually defining priority of calling this method defined in register method.
-	 *
-	 * Called only if user can see this page (have required capability).
-	 *
-	 * Validation process in wp-admin/includes/menu.php
-	 * 1. admin.php:138
-	 * 2. require(ABSPATH . 'wp-admin/menu.php') (138 line)
-	 * 3. require_once(ABSPATH . 'wp-admin/includes/menu.php') (282 line).
-	 * 4. if ( !user_can_access_admin_page() ) (333 line).
-	 *
-	 * @see register
-	 *
-	 * @return $this For chain calls.
-	 */
-	public function lateConstruct();
-
-	/**
 	 * Returns name of the page.
 	 *
 	 * @return string Name of the page.

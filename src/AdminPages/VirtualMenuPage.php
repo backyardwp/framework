@@ -52,12 +52,4 @@ class VirtualMenuPage extends MenuPage implements AdminVirtualMenuPageInterface 
 		$this->getVirtualPage()->render();
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function lateConstruct() {
-		$this->getVirtualPage()->lateConstruct();
-		return $this;
-	}
-
 }

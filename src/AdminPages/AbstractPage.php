@@ -54,13 +54,6 @@ abstract class AbstractPage implements AdminPageInterface {
 	/**
 	 * @inheritdoc
 	 */
-	public function lateConstruct() {
-		return $this;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function getName() {
 		return $this->name;
 	}
