@@ -144,6 +144,8 @@ abstract class AbstractPage implements AdminPageInterface {
 			throw new NonRenderableException( 'Admin page controller must implement the RenderableAdminPageController interface.' );
 		}
 
+		$controller->setMenuPage( $this );
+
 		$this->controller = $controller;
 
 		return $this;

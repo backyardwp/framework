@@ -16,6 +16,8 @@ use Backyard\Contracts\AlmostControllerInterface;
 use Backyard\Templates\Engine;
 use Backyard\Utils\RequestFactory;
 use Laminas\Diactoros\ServerRequest;
+use Backyard\Forms\Form;
+use Backyard\AdminPages\MenuPage;
 
 /**
  * Base class to be extended for each "Almost" controller.
@@ -43,6 +45,22 @@ abstract class AbstractController implements AlmostControllerInterface {
 	 * @var Engine
 	 */
 	protected $templates;
+
+	/**
+	 * Form assigned to the controller.
+	 *
+	 * @var Form
+	 */
+	protected $form;
+
+	/**
+	 * Optional admin menu page assigned to the controller.
+	 * Admin pages should only be assigned when the controller
+	 * is used to manage admin pages.
+	 *
+	 * @var MenuPage
+	 */
+	protected $menuPage;
 
 	/**
 	 * Setup the controller.
@@ -124,4 +142,53 @@ abstract class AbstractController implements AlmostControllerInterface {
 		return $this->engine;
 	}
 
+	/**
+	 * Assign an admin menu page to the controller.
+	 * Should only be used for controllers that handle admin pages.
+	 *
+	 * @param MenuPage $page
+	 * @return $this For chain calls
+	 */
+	public function setMenuPage( MenuPage $page ) {
+		$this->menuPage = $page;
+
+		return $this;
+	}
+
+	/**
+	 * Get the menu page assigned to the controller.
+	 *
+	 * @return MenuPage false when no page is assigned.
+	 */
+	public function getMenuPage() {
+		return $this->menuPage;
+	}
+
+	/**
+	 * Assign a form to the controller.
+	 *
+	 * @param string $formClass form class path
+	 * @param string $formName optional form name argument used when instantiating the form.
+	 * @return $this For chain calls.
+	 */
+	public function setForm( string $formClass, $formName = false ) {
+		if ( $formName ) {
+			$this->form = new $formClass( $formName );
+		} elseif ( $this->getMenuPage() instanceof MenuPage ) {
+			$this->form = new $formClass( $this->getMenuPage()->getMenuSlug() );
+		} else {
+			$this->form = new $formClass();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get the form assigned to the controller.
+	 *
+	 * @return Form
+	 */
+	public function getForm() {
+		return $this->form;
+	}
 }
