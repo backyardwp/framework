@@ -42,16 +42,6 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 			$this->getPosition()
 		);
 
-		// All functions attached to actions runs in 2 scenarios:
-		// 1. Particular settings page loaded (load-$page action).
-		// 2. When page settings is saving (admin_action_update action)
-
-		// Fully build the page object
-		add_action( 'load-' . $page, array( $this, 'lateConstruct' ) );
-		add_action( 'admin_action_update', array( $this, 'lateConstruct' ) );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScriptStyles' ) );
-
 		return $this;
 	}
 

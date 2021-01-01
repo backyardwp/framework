@@ -161,6 +161,13 @@ abstract class AbstractPage implements AdminPageInterface {
 	/**
 	 * @inheritdoc
 	 */
+	public function hasController() {
+		return $this->getController() instanceof RenderableAdminPageControllerInterface;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function render() {
 		$this->getController()->render( $this );
 	}

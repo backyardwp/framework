@@ -164,4 +164,11 @@ interface AdminPageInterface {
 	 */
 	public function getController();
 
+	/**
+	 * Determine if the page has a controller.
+	 *
+	 * @return boolean
+	 */
+	public function hasController();
+
 }
