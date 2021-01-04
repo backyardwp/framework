@@ -41,6 +41,7 @@
         "laminas/laminas-i18n": "^2.11",
         "laminas/laminas-view": "^2.11",
         "league/container": "^3.3",
+        "php-di/invoker": "^2.2",
         "symfony/finder": "^5.1",
         "symfony/http-foundation": "^5.1",
         "twig/twig": "^3.0"

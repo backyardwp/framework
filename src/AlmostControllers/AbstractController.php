@@ -16,8 +16,8 @@ use Backyard\Contracts\AlmostControllerInterface;
 use Backyard\Templates\Engine;
 use Backyard\Utils\RequestFactory;
 use Laminas\Diactoros\ServerRequest;
-use Backyard\Forms\Form;
 use Backyard\AdminPages\MenuPage;
+use Invoker\Invoker;
 
 /**
  * Base class to be extended for each "Almost" controller.
@@ -56,6 +56,13 @@ abstract class AbstractController implements AlmostControllerInterface {
 	protected $menuPage;
 
 	/**
+	 * Invoker instance.
+	 *
+	 * @var Invoker
+	 */
+	protected $invoker;
+
+	/**
 	 * Setup the controller.
 	 */
 	public function __construct() {
@@ -67,6 +74,9 @@ abstract class AbstractController implements AlmostControllerInterface {
 		if ( $plugin->has( Engine::class ) ) {
 			$this->setTemplatesEngine( $plugin->get( Engine::class ) );
 		}
+
+		$this->invoker = new Invoker();
+
 	}
 
 	/**
@@ -155,6 +165,15 @@ abstract class AbstractController implements AlmostControllerInterface {
 	 */
 	public function getMenuPage() {
 		return $this->menuPage;
+	}
+
+	/**
+	 * Invoke methods via Invoker.
+	 *
+	 * @return Invoker
+	 */
+	public function invoker() {
+		return $this->invoker;
 	}
 
 }
