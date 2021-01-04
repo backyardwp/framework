@@ -47,13 +47,6 @@ abstract class AbstractController implements AlmostControllerInterface {
 	protected $templates;
 
 	/**
-	 * Form assigned to the controller.
-	 *
-	 * @var Form
-	 */
-	protected $form;
-
-	/**
 	 * Optional admin menu page assigned to the controller.
 	 * Admin pages should only be assigned when the controller
 	 * is used to manage admin pages.
@@ -164,31 +157,4 @@ abstract class AbstractController implements AlmostControllerInterface {
 		return $this->menuPage;
 	}
 
-	/**
-	 * Assign a form to the controller.
-	 *
-	 * @param string $formClass form class path
-	 * @param string $formName optional form name argument used when instantiating the form.
-	 * @return $this For chain calls.
-	 */
-	public function setForm( string $formClass, $formName = false ) {
-		if ( $formName ) {
-			$this->form = new $formClass( $formName );
-		} elseif ( $this->getMenuPage() instanceof MenuPage ) {
-			$this->form = new $formClass( $this->getMenuPage()->getMenuSlug() );
-		} else {
-			$this->form = new $formClass();
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Get the form assigned to the controller.
-	 *
-	 * @return Form
-	 */
-	public function getForm() {
-		return $this->form;
-	}
 }

@@ -13,7 +13,6 @@ namespace Backyard\Contracts;
 
 use Backyard\AdminPages\MenuPage;
 use Laminas\Diactoros\ServerRequest;
-use Backyard\Forms\Form;
 
 interface AlmostControllerInterface {
 
@@ -46,22 +45,6 @@ interface AlmostControllerInterface {
 	 * @return $this For chain calls.
 	 */
 	public function setCurrentUser();
-
-	/**
-	 * Assign a form to the controller.
-	 *
-	 * @param string $formClass form class path
-	 * @param string $formName optional form name argument used when instantiating the form.
-	 * @return $this For chain calls.
-	 */
-	public function setForm( string $formClass, $formName = false );
-
-	/**
-	 * Get the form assigned to the controller.
-	 *
-	 * @return Form|bool false when no form is assigned.
-	 */
-	public function getForm();
 
 	/**
 	 * Assign an admin menu page to the controller.
