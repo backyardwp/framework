@@ -29,6 +29,13 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 	protected $position;
 
 	/**
+	 * List of actions mapped for the controller.
+	 *
+	 * @var array
+	 */
+	protected $actions = [];
+
+	/**
 	 * @inheritdoc
 	 */
 	public function register() {
@@ -98,4 +105,25 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 		$this->position = $position;
 		return $this;
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function addAction( string $name, string $methodName ) {
+		$this->actions[ $name ] = $methodName;
+
+		return $this;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function mapActions( array $actions ) {
+		foreach ( $actions as $name => $methodName ) {
+			$this->actions[ $name ] = $methodName;
+		}
+
+		return $this;
+	}
+
 }

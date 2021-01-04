@@ -44,4 +44,22 @@ interface AdminMenuPageInterface extends AdminPageInterface {
 	 * @return $this For chain calls.
 	 */
 	public function setPosition( $position);
+
+	/**
+	 * Map an action for usage through the controller.
+	 *
+	 * @param string $name
+	 * @param string $methodName
+	 * @return $this for chain calls.
+	 */
+	public function addAction( string $name, string $methodName );
+
+	/**
+	 * Map all actions for usage through the controller.
+	 *
+	 * @param array $actions
+	 * @return $this for chain calls.
+	 */
+	public function mapActions( array $actions );
+
 }
