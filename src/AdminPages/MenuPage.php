@@ -12,6 +12,9 @@
 namespace Backyard\AdminPages;
 
 use Backyard\Contracts\AdminMenuPageInterface;
+use Backyard\AlmostControllers\AbstractController;
+use Invoker\Exception\NotCallableException;
+use Invoker\Invoker;
 
 /**
  * wp-admin menu page register.
@@ -39,15 +42,37 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 	 * @inheritdoc
 	 */
 	public function register() {
-		$page = add_menu_page(
-			$this->getPageTitle(),
-			$this->getMenuTitle(),
-			$this->getCapability(),
-			$this->getMenuSlug(),
-			array( $this, 'render' ),
-			$this->getIcon(),
-			$this->getPosition()
+
+		add_action(
+			'admin_menu',
+			function() {
+				$page = add_menu_page(
+					$this->getPageTitle(),
+					$this->getMenuTitle(),
+					$this->getCapability(),
+					$this->getMenuSlug(),
+					array( $this, 'render' ),
+					$this->getIcon(),
+					$this->getPosition()
+				);
+			}
 		);
+
+		/*
+		if ( ! empty( $this->actions && is_array( $this->actions ) ) ) {
+			foreach ( $this->actions as $actionName => $methodName ) {
+				add_action(
+					"admin_post_{$actionName}",
+					function() use ( $methodName ) {
+						try {
+							( new Invoker() )->call( [ get_class( $this->getController() ), $methodName ] );
+						} catch ( NotCallableException $e ) {
+							wp_die( sprintf( 'Something went wrong: %s', $e->getMessage() ) );
+						}
+					}
+				);
+			}
+		}*/
 
 		return $this;
 	}
