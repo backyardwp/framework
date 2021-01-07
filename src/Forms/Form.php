@@ -20,6 +20,7 @@ use Backyard\Forms\Filters\SanitizeTextarea;
 use Backyard\Forms\Filters\SanitizeTextField;
 use Backyard\Forms\Renderers\CustomFormRenderer;
 use Backyard\Forms\Renderers\NonceFieldRenderer;
+use Backyard\Nonces\Nonce as NoncesNonce;
 use Backyard\Utils\ParameterBag;
 use Backyard\Utils\RequestFactory;
 use Laminas\Form\ConfigProvider;
@@ -316,18 +317,31 @@ abstract class Form extends LaminasForm {
 
 	}
 
+	/**
+	 * Detect if a request for this form is performed, if it was,
+	 * process the submission.
+	 *
+	 * @return void
+	 */
 	private function detectRequest() {
-
-		$request = RequestFactory::getPostedData();
-
 		add_action(
 			self::HOOK,
-			function() use ( $request ) {
-				$this->processSubmission( $request );
+			function() {
+				$request = RequestFactory::getPostedData();
+				$nonce   = ( new NoncesNonce( $this->getOption( 'nonce_name' ) ) )->getKey();
+				if ( $request->has( $nonce ) ) {
+					$this->processSubmission( $request );
+				}
 			}
 		);
 	}
 
-	abstract public function processSubmission( ParameterBag $request );
+	/**
+	 * Process the form submission.
+	 *
+	 * @param ParameterBag $values submitted values.
+	 * @return void
+	 */
+	abstract public function processSubmission( ParameterBag $values );
 
 }
