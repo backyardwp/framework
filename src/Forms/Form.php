@@ -32,6 +32,11 @@ use Laminas\Form\Element\Textarea;
  */
 abstract class Form extends LaminasForm {
 
+	/**
+	 * Specify the hook used for processing the form submission.
+	 *
+	 * @var string
+	 */
 	const HOOK = 'init';
 
 	/**
