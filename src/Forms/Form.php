@@ -20,6 +20,7 @@ use Backyard\Forms\Filters\SanitizeTextarea;
 use Backyard\Forms\Filters\SanitizeTextField;
 use Backyard\Forms\Renderers\CustomFormRenderer;
 use Backyard\Forms\Renderers\NonceFieldRenderer;
+use Backyard\Utils\ParameterBag;
 use Backyard\Utils\RequestFactory;
 use Laminas\Form\ConfigProvider;
 use Laminas\Form\Element\Submit;
@@ -29,6 +30,8 @@ use Laminas\Form\Element\Textarea;
  * Backyard forms builder.
  */
 abstract class Form extends LaminasForm {
+
+	const HOOK = 'init';
 
 	/**
 	 * List of tabs defined for the form.
@@ -68,6 +71,7 @@ abstract class Form extends LaminasForm {
 		$this->registerFields();
 		$this->setupSanitizationFilters();
 		$this->setupNonceField();
+		$this->detectRequest();
 	}
 
 	/**
@@ -311,5 +315,19 @@ abstract class Form extends LaminasForm {
 		return $output;
 
 	}
+
+	private function detectRequest() {
+
+		$request = RequestFactory::getPostedData();
+
+		add_action(
+			self::HOOK,
+			function() use ( $request ) {
+				$this->processSubmission( $request );
+			}
+		);
+	}
+
+	abstract public function processSubmission( ParameterBag $request );
 
 }
