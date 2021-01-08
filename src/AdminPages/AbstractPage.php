@@ -12,8 +12,7 @@
 namespace Backyard\AdminPages;
 
 use Backyard\Contracts\AdminPageInterface;
-use Backyard\Contracts\AlmostControllerInterface;
-use Backyard\Contracts\RenderableAdminPageControllerInterface;
+use Backyard\Contracts\ViewInterface;
 use Backyard\Exceptions\NonRenderableException;
 
 /**
@@ -47,9 +46,11 @@ abstract class AbstractPage implements AdminPageInterface {
 	protected $menuSlug;
 
 	/**
-	 * @var AlmostControllerInterface Controller that handles rendering and requests for the page.
+	 * View instance that renders the content of the page.
+	 *
+	 * @var ViewInterface
 	 */
-	protected $controller;
+	protected $view;
 
 	/**
 	 * @inheritdoc
@@ -128,18 +129,17 @@ abstract class AbstractPage implements AdminPageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @throws NonRenderableException When the controller does not support rendering.
+	 * @throws NonRenderableException When the attached class isn't a view.
 	 */
-	public function setController( string $controller ) {
-		$controller = new $controller();
+	public function attachView( string $viewClass ) {
 
-		if ( ! $controller instanceof RenderableAdminPageControllerInterface ) {
-			throw new NonRenderableException( 'Admin page controller must implement the RenderableAdminPageController interface.' );
+		$view = new $viewClass();
+
+		if ( ! $view instanceof ViewInterface ) {
+			throw new NonRenderableException( 'Attempted to attach an invalid class as a view for the admin page.' );
 		}
 
-		$controller->setMenuPage( $this );
-
-		$this->controller = $controller;
+		$this->view = $view;
 
 		return $this;
 	}
@@ -147,22 +147,15 @@ abstract class AbstractPage implements AdminPageInterface {
 	/**
 	 * @inheritdoc
 	 */
-	public function getController() {
-		return $this->controller;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function hasController() {
-		return $this->getController() instanceof RenderableAdminPageControllerInterface;
+	public function getView() {
+		return $this->view;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function render() {
-		$this->getController()->render( $this );
+		$this->getView()->render( $this );
 	}
 
 	/**

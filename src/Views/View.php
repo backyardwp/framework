@@ -31,7 +31,7 @@ abstract class View implements ViewInterface {
 	 * Get the view started.
 	 */
 	public function __construct() {
-		 $plugin = ( Application::get() )->plugin;
+		$plugin = ( Application::get() )->plugin;
 
 		if ( $plugin->has( Engine::class ) ) {
 			$this->setTemplatesEngine( $plugin->get( Engine::class ) );
