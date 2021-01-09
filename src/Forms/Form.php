@@ -11,6 +11,7 @@
 
 namespace Backyard\Forms;
 
+use Backyard\Application;
 use Laminas\Form\Form as LaminasForm;
 use Laminas\View\Renderer\PhpRenderer;
 use Backyard\Contracts\FormRendererInterface;
@@ -23,6 +24,7 @@ use Backyard\Forms\Renderers\NonceFieldRenderer;
 use Backyard\Nonces\Nonce as NoncesNonce;
 use Backyard\Utils\ParameterBag;
 use Backyard\Utils\RequestFactory;
+use Laminas\Diactoros\ServerRequest;
 use Laminas\Form\ConfigProvider;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Textarea;
@@ -324,7 +326,7 @@ abstract class Form extends LaminasForm {
 
 	/**
 	 * Detect if a request for this form is performed, if it was,
-	 * process the submission.
+	 * setup form data, validate it and process it.
 	 *
 	 * @return void
 	 */
@@ -332,10 +334,16 @@ abstract class Form extends LaminasForm {
 		add_action(
 			self::HOOK,
 			function() {
-				$request = RequestFactory::getPostedData();
-				$nonce   = ( new NoncesNonce( $this->getOption( 'nonce_name' ) ) )->getKey();
-				if ( $request->has( $nonce ) ) {
-					$this->processSubmission( $request );
+				$nonce = ( new NoncesNonce( $this->getOption( 'nonce_name' ) ) )->getKey();
+				if ( isset( $_POST[ $nonce ] ) ) {
+					$request = ( Application::get() )->plugin->request();
+					$values  = RequestFactory::getPostedData( $request );
+
+					$this->setData( $values->all() );
+
+					if ( $this->isValid() ) {
+						$this->processSubmission( $values, $request );
+					}
 				}
 			}
 		);
@@ -344,9 +352,10 @@ abstract class Form extends LaminasForm {
 	/**
 	 * Process the form submission.
 	 *
-	 * @param ParameterBag $values submitted values.
+	 * @param ParameterBag  $values submitted values.
+	 * @param ServerRequest $request http request.
 	 * @return void
 	 */
-	abstract public function processSubmission( ParameterBag $values );
+	abstract public function processSubmission( ParameterBag $values, ServerRequest $request );
 
 }
