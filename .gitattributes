@@ -15,6 +15,10 @@
 /.phpcs.xml           export-ignore
 /phpunit.xml.dist     export-ignore
 /readme.md            export-ignore
+/tailwind.config.js   export-ignore
+/webpack.mix.js       export-ignore
+/package.json         export-ignore
+/yarn.lock            export-ignore
 
 # Handle line endings.
 # See https://help.github.com/articles/dealing-with-line-endings/

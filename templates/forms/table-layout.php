@@ -66,7 +66,7 @@ $activeTab = $form->getActiveTab();
 						<?php endif; ?>
 					<?php endif; ?>
 
-					<?php echo $form->getRenderer()->formElementErrors( $field, [ 'class' => 'bk-form-errors' ] ); //phpcs:ignore ?>
+					<?php echo $form->getRenderer()->formElementErrors( $field, [ 'class' => 'bk-input-errors notice notice-error notice-alt' ] ); //phpcs:ignore ?>
 
 				</td>
 			</tr>

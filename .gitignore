@@ -116,3 +116,5 @@ yarn-error.log
 
 bin/*
 !bin/install-wp-tests.sh
+
+dist

@@ -1,0 +1,21 @@
+{
+	"name": "backyard-framework",
+	"version": "0.1.0",
+	"description": "A modern way of building WordPress plugins.",
+	"main": "index.js",
+	"repository": "git@github.com:backyardwp/framework.git",
+	"author": "Alessandro Tesoro <alessandro.tesoro@icloud.com>",
+	"license": "MIT",
+	"devDependencies": {
+		"laravel-mix": "^6.0.9",
+		"postcss": "^8.1",
+		"postcss-preset-env": "^6.7.0",
+		"sass": "^1.32.2",
+		"sass-loader": "8.*"
+	},
+	"dependencies": {},
+	"scripts": {
+		"build": "npx mix --production",
+		"watch": "npx mix watch"
+	}
+}
