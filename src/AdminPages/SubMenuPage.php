@@ -33,14 +33,22 @@ class SubMenuPage extends AbstractPage implements AdminSubMenuPageInterface {
 	 * @inheritdoc
 	 */
 	public function register() {
-		$page = add_submenu_page(
-			$this->getParentSlug(),
-			$this->getPageTitle(),
-			$this->getMenuTitle(),
-			$this->getCapability(),
-			$this->getMenuSlug(),
-			array( $this, 'render' )
+
+		add_action(
+			'admin_menu',
+			function() {
+				$page = add_submenu_page(
+					$this->getParentSlug(),
+					$this->getPageTitle(),
+					$this->getMenuTitle(),
+					$this->getCapability(),
+					$this->getMenuSlug(),
+					array( $this, 'render' )
+				);
+			}
 		);
+
+		$this->maybeEnqueueAssets();
 
 		return $this;
 	}

@@ -48,6 +48,8 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 			}
 		);
 
+		$this->maybeEnqueueAssets();
+
 		return $this;
 	}
 

@@ -12,6 +12,7 @@
 namespace Backyard\AdminPages;
 
 use Backyard\Contracts\AdminPageInterface;
+use Backyard\Contracts\EnqueueAssetsInterface;
 use Backyard\Contracts\ViewInterface;
 use Backyard\Exceptions\NonRenderableException;
 
@@ -159,11 +160,22 @@ abstract class AbstractPage implements AdminPageInterface {
 	}
 
 	/**
-	 * Method for enqueuing required JS and CSS files.
+	 * Detect whether or not the page has assets to enqueue.
 	 *
 	 * @return void
 	 */
-	public function enqueueScriptStyles() {
+	public function maybeEnqueueAssets() {
+		if ( $this instanceof EnqueueAssetsInterface ) {
+			add_action(
+				'admin_enqueue_scripts',
+				function() {
+					$screen = get_current_screen();
+					if ( $screen->id === get_plugin_page_hook( $this->getMenuSlug(), '' ) ) {
+						$this->enqueueAssets();
+					}
+				}
+			);
+		}
 	}
 
 }
