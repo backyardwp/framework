@@ -45,7 +45,7 @@ var sassConfig = {
 	sassOptions: {
 		outputStyle: 'expanded',
 		indentType  : 'tab',
-		indentWidth : 4
+		indentWidth : 1
     }
 };
 
