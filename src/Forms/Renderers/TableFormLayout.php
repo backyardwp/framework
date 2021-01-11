@@ -65,6 +65,11 @@ class TableFormLayout extends CustomFormRenderer {
 
 		}
 
+		// Add a class to the form tag when the form is invalid.
+		if ( ! $this->form->isValid() ) {
+			$this->form->setAttribute( 'class', 'invalid-form' );
+		}
+
 	}
 
 	/**
