@@ -25,17 +25,8 @@ use Laminas\Form\Element\Url;
 class TableFormLayout extends CustomFormRenderer {
 
 	/**
-	 * Setup the form and automatically add classes to form fields.
-	 *
-	 * @param Form $form
-	 */
-	public function __construct( Form $form ) {
-		parent::__construct( $form );
-		$this->setupClasses();
-	}
-
-	/**
 	 * Automatically add classes to some field types.
+	 * Add special classes when the form has validation errors.
 	 *
 	 * @return void
 	 */
@@ -61,15 +52,17 @@ class TableFormLayout extends CustomFormRenderer {
 				$classes .= ' regular-text';
 			}
 
-			$field->setAttribute( 'class', trim( $classes ) );
+			if ( ! empty( $field->getMessages() ) ) {
+				$classes .= ' invalid-input';
+			}
 
+			$field->setAttribute( 'class', trim( $classes ) );
 		}
 
-		// Add a class to the form tag when the form is invalid.
-		if ( ! $this->form->isValid() ) {
+		// Add a class when the form has validation errors.
+		if ( ! empty( $this->form->getMessages() ) ) {
 			$this->form->setAttribute( 'class', 'invalid-form' );
 		}
-
 	}
 
 	/**
@@ -80,6 +73,8 @@ class TableFormLayout extends CustomFormRenderer {
 	public function render() {
 
 		$templates = $this->getTemplatesEngine();
+
+		$this->setupClasses();
 
 		return $templates->render( 'vendor::forms/table-layout', [ 'form' => $this->form ] );
 
