@@ -10,7 +10,10 @@
  * @link      https://sematico.com
  */
 
+use Backyard\Forms\Elements\Nonce;
+use Backyard\Utils\DomAttributes;
 use Laminas\Form\Element\Checkbox;
+use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Submit;
 
 // Exit if accessed directly.
@@ -43,9 +46,16 @@ $activeTab = $form->getActiveTab();
 				continue;
 			}
 
+			$rowAttributes = ( new DomAttributes() )->add(
+				'form-row',
+				[
+					'class' => ( $field instanceof Hidden || $field instanceof Nonce ) ? 'bk-hidden' : false,
+				]
+			);
+
 			?>
 
-			<tr>
+			<tr <?php echo $rowAttributes->render( 'form-row' ); //phpcs:ignore ?>>
 				<?php if ( ! empty( $field->getLabel() ) ) : ?>
 					<th scope="row">
 						<?php echo wp_kses_post( $form->getRenderer()->formLabel( $field ) ); ?>

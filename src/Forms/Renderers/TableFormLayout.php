@@ -11,7 +11,6 @@
 
 namespace Backyard\Forms\Renderers;
 
-use Backyard\Forms\Form;
 use Laminas\Form\Element\Email;
 use Laminas\Form\Element\Password;
 use Laminas\Form\Element\Submit;
