@@ -125,6 +125,20 @@ abstract class Form extends LaminasForm {
 				throw new MissingConfigurationException( sprintf( 'Field "%s" requires a tab option.', $field->getName() ) );
 			}
 		}
+
+		// Remove any field that does not belong to the currently active tab.
+		$activeTab = $this->getActiveTab();
+		$excluded  = [ Nonce::class, Submit::class ];
+
+		foreach ( $this as $field ) {
+			$fieldClass = get_class( $field );
+			if ( in_array( $fieldClass, $excluded, true ) ) {
+				continue;
+			}
+			if ( $field->getOption( 'tab' ) !== $activeTab ) {
+				$this->remove( $field->getName() );
+			}
+		}
 	}
 
 	/**

@@ -41,11 +41,6 @@ $activeTab = $form->getActiveTab();
 				continue;
 			}
 
-			// Display only fields that belong to the active tab if the form has tabs.
-			if ( $form->hasTabs() && $field->getOption( 'tab' ) !== $activeTab ) {
-				continue;
-			}
-
 			$rowAttributes = ( new DomAttributes() )->add(
 				'form-row',
 				[
