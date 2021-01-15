@@ -11,3 +11,10 @@
 .bk-hidden {
 	display: none;
 }
+
+.backyard-form {
+	h1 ~ .notice {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}

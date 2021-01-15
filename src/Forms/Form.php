@@ -63,6 +63,13 @@ abstract class Form extends LaminasForm {
 	protected $customRenderer;
 
 	/**
+	 * General error message displayed in forms when validation fails.
+	 *
+	 * @var string
+	 */
+	protected $errorMessage;
+
+	/**
 	 * Setup the form.
 	 *
 	 * @param string $name
@@ -312,6 +319,27 @@ abstract class Form extends LaminasForm {
 		$renderer->formElement()->addClass( Nonce::class, NonceFieldRenderer::class );
 
 		$this->renderer = $renderer;
+	}
+
+	/**
+	 * Setup the error message displayed on top of forms when validation fails.
+	 *
+	 * @param string $message
+	 * @return $this
+	 */
+	public function setErrorMessage( string $message ) {
+		$this->errorMessage = $message;
+
+		return $this;
+	}
+
+	/**
+	 * Get the general error message set up for the form.
+	 *
+	 * @return string
+	 */
+	public function getErrorMessage() {
+		return $this->errorMessage;
 	}
 
 	/**

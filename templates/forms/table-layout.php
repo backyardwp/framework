@@ -29,6 +29,13 @@ $activeTab = $form->getActiveTab();
 
 	<?php $this->insert( 'admin-nav-tabs', [ 'form' => $form ] ); ?>
 
+	<?php if ( ! empty( $form->getMessages() ) && ! empty( $form->getErrorMessage() ) ) : ?>
+		<h1></h1><!-- needed because wp places notices right below the page's h1 -->
+		<div class="notice notice-error">
+			<p><?php echo wp_kses_post( $form->getErrorMessage() ); ?></p>
+		</div>
+	<?php endif; ?>
+
 	<?php echo $form->getRenderer()->form()->openTag( $form ); //phpcs:ignore ?>
 
 	<table class="form-table" role="presentation">
