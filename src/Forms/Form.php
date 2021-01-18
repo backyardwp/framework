@@ -24,6 +24,7 @@ use Backyard\Forms\Renderers\NonceFieldRenderer;
 use Backyard\Nonces\Nonce as NoncesNonce;
 use Backyard\Utils\ParameterBag;
 use Backyard\Utils\RequestFactory;
+use BadMethodCallException;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Form\ConfigProvider;
 use Laminas\Form\Element\Submit;
@@ -378,8 +379,13 @@ abstract class Form extends LaminasForm {
 			function() {
 				$nonce = ( new NoncesNonce( $this->getOption( 'nonce_name' ) ) )->getKey();
 				if ( isset( $_POST[ $nonce ] ) ) {
-					$request = ( Application::get() )->plugin->request();
-					$values  = RequestFactory::getPostedData( $request );
+					try {
+						$request = ( Application::get() )->plugin->request();
+					} catch ( BadMethodCallException $e ) {
+						$request = RequestFactory::create();
+					}
+
+					$values = RequestFactory::getPostedData( $request );
 
 					$this->setData( $values->all() );
 

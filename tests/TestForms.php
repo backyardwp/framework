@@ -21,8 +21,12 @@ use Backyard\Forms\Renderers\TableFormLayout;
 use Backyard\Utils\Str;
 use Backyard\Plugin;
 use Backyard\Templates\TemplatesServiceProvider;
+use Backyard\Utils\ParameterBag;
+use Laminas\Diactoros\ServerRequest;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
+use Backyard\Nonces\Nonce as NoncesNonce;
+use Backyard\Requests\RequestsServiceProvider;
 
 class TestForms extends \WP_UnitTestCase {
 
@@ -47,6 +51,7 @@ class TestForms extends \WP_UnitTestCase {
 		$plugin = ( Application::get() )->loadPlugin( $path, realpath( __DIR__ . '/test-plugin/test-plugin.php' ), 'config' );
 
 		$plugin->addServiceProvider( TemplatesServiceProvider::class );
+		$plugin->addServiceProvider( RequestsServiceProvider::class );
 
 		$this->plugin = $plugin;
 	}
@@ -107,7 +112,7 @@ class TestForms extends \WP_UnitTestCase {
 		$form = new ExampleFormWithTabs( 'example_form' );
 
 		$this->assertTrue( $form->hasTabs() );
-		$this->assertTrue( count( $form->getTabs() ) === 1 );
+		$this->assertTrue( count( $form->getTabs() ) === 2 );
 
 		$form->setCustomRenderer( TableFormLayout::class );
 
@@ -139,6 +144,54 @@ class TestForms extends \WP_UnitTestCase {
 
 	}
 
+	public function testActiveTabDetection() {
+
+		$form = new ExampleFormWithTabs( 'example_form' );
+
+		$this->assertEquals( 'test_tab', $form->getActiveTab() );
+
+		$_GET['tab'] = 'test_tab2';
+
+		$this->assertEquals( 'test_tab2', $form->getActiveTab() );
+
+		$_GET = [];
+
+	}
+
+	public function testRelevantTabRendering() {
+
+		$form = new ExampleFormWithTabs( 'example_form' );
+
+		$this->assertTrue( $form->hasTabs() );
+		$this->assertTrue( count( $form->getTabs() ) === 2 );
+
+		$form->setCustomRenderer( TableFormLayout::class );
+
+		$this->assertTrue( Str::contains( $form->render(), 'class="nav-tab nav-tab-active">tab 1' ) );
+		$this->assertTrue( Str::contains( $form->render(), 'type="text" name="text" id="text' ) );
+
+		$_GET['tab'] = 'test_tab2';
+
+		$form2 = new ExampleFormWithTabs( 'example_form' );
+		$form2->setCustomRenderer( TableFormLayout::class );
+
+		$this->assertTrue( Str::contains( $form2->render(), 'class="nav-tab nav-tab-active">tab 2' ) );
+		$this->assertTrue( Str::contains( $form2->render(), 'type="text" name="text2" id="text2"' ) );
+		$this->assertTrue( ! Str::contains( $form2->render(), 'type="text" name="text" id="text"' ) );
+
+	}
+
+	public function testFormErrorMessages() {
+
+		$form = new ExampleForm( 'test' );
+
+		$this->assertEmpty( $form->getErrorMessage() );
+
+		$form->setErrorMessage( 'hello world' );
+
+		$this->assertEquals( 'hello world', $form->getErrorMessage() );
+
+	}
 }
 
 class ExampleForm extends Form {
@@ -164,6 +217,11 @@ class ExampleForm extends Form {
 			]
 		);
 	}
+
+	public function processSubmission( ParameterBag $values, ServerRequest $request ) {
+
+	}
+
 }
 
 class ExampleFormWithTabs extends Form {
@@ -183,7 +241,24 @@ class ExampleFormWithTabs extends Form {
 				],
 			]
 		);
+		$this->addTab(
+			'test_tab2',
+			'tab 2',
+			[
+				[
+					'type'    => 'text',
+					'name'    => 'text2',
+					'options' => [
+						'label' => 'Text field 2',
+						'hint'  => 'Here goes the description',
+					],
+				],
+			]
+		);
+	}
+
+	public function processSubmission( ParameterBag $values, ServerRequest $request ) {
+
 	}
 
 }
-
