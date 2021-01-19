@@ -107,6 +107,25 @@ class TestForms extends \WP_UnitTestCase {
 
 	}
 
+	public function testTableLayoutFieldClasses() {
+
+		$form = $this->form;
+		$form->setCustomRenderer( TableFormLayout::class );
+
+		$this->assertInstanceOf( CustomFormRenderer::class, $form->getCustomRenderer() );
+
+		ob_start();
+
+		echo html_entity_decode( $form->render() );
+
+		$output = ob_get_clean();
+
+		$this->assertTrue( Str::contains( $output, '<input type="text" name="text" id="text" class="bk-input regular-text" value=""' ) );
+		$this->assertTrue( Str::contains( $output, '<textarea name="mytextareafield" id="mytextareafield" class="bk-input"></textarea>' ) );
+		$this->assertTrue( Str::contains( $output, '<input type="submit" name="send" class="test bk-input button button-primary"' ) );
+
+	}
+
 	public function testFormTabsSupport() {
 
 		$form = new ExampleFormWithTabs( 'example_form' );
@@ -213,6 +232,16 @@ class ExampleForm extends Form {
 				'options' => [
 					'label' => 'Textarea field',
 					'hint'  => 'Here goes the description',
+				],
+			]
+		);
+		$this->add(
+			[
+				'name'       => 'send',
+				'type'       => 'Submit',
+				'attributes' => [
+					'value' => 'Submit',
+					'class' => 'test',
 				],
 			]
 		);
