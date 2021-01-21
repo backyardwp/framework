@@ -23,7 +23,7 @@ use Backyard\Forms\Renderers\CustomFormRenderer;
 use Backyard\Forms\Renderers\NonceFieldRenderer;
 use Backyard\Nonces\Nonce as NoncesNonce;
 use Backyard\Utils\ParameterBag;
-use Backyard\Utils\RequestFactory;
+use Backyard\Requests\RequestFactory;
 use BadMethodCallException;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Form\ConfigProvider;

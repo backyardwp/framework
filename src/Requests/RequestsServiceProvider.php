@@ -12,7 +12,6 @@
 namespace Backyard\Requests;
 
 use Backyard\Contracts\BootablePluginProviderInterface;
-use Backyard\Utils\RequestFactory;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 /**

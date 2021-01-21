@@ -11,7 +11,7 @@
  */
 
 use Backyard\Utils\DomAttributes;
-use Backyard\Utils\RequestFactory;
+use Backyard\Requests\RequestFactory;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;

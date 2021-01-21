@@ -11,7 +11,7 @@
 
 namespace Backyard\Nonces;
 
-use Backyard\Utils\RequestFactory;
+use Backyard\Requests\RequestFactory;
 
 /**
  * Nonce factory

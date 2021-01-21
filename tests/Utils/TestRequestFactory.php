@@ -11,7 +11,7 @@
 
 namespace Backyard\Utils\Tests;
 
-use Backyard\Utils\RequestFactory;
+use Backyard\Requests\RequestFactory;
 use Laminas\Diactoros\ServerRequest;
 
 class TestRequestFactory extends \WP_UnitTestCase {

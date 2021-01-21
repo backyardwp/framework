@@ -9,8 +9,9 @@
  * @link      https://sematico.com
  */
 
-namespace Backyard\Utils;
+namespace Backyard\Requests;
 
+use Backyard\Utils\ParameterBag;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\ServerRequestFactory;
 
