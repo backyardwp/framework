@@ -57,10 +57,15 @@ class SubMenuPage extends AbstractPage implements AdminSubMenuPageInterface {
 	 * @inheritdoc
 	 */
 	public function unRegister() {
-		$result = remove_submenu_page( $this->getParentSlug(), $this->getMenuSlug() );
-		if ( ! $result ) {
-			throw new \Exception();
-		}
+		add_action(
+			'admin_menu',
+			function() {
+				$result = remove_submenu_page( $this->getParentSlug(), $this->getMenuSlug() );
+				if ( ! $result ) {
+					throw new \Exception();
+				}
+			}
+		);
 
 		return $this;
 	}

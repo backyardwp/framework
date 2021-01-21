@@ -13,6 +13,7 @@ namespace Backyard\Views;
 
 use Backyard\Application;
 use Backyard\Contracts\ViewInterface;
+use Backyard\Plugin;
 use Backyard\Templates\Engine;
 
 /**
@@ -33,7 +34,7 @@ abstract class View implements ViewInterface {
 	public function __construct() {
 		$plugin = ( Application::get() )->plugin;
 
-		if ( $plugin->has( Engine::class ) ) {
+		if ( $plugin instanceof Plugin && $plugin->has( Engine::class ) ) {
 			$this->setTemplatesEngine( $plugin->get( Engine::class ) );
 		}
 	}

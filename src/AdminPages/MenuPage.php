@@ -57,11 +57,17 @@ class MenuPage extends AbstractPage implements AdminMenuPageInterface {
 	 * @inheritdoc
 	 */
 	public function unRegister() {
-		$result = remove_menu_page( $this->getMenuSlug() );
 
-		if ( ! $result ) {
-			throw new \Exception();
-		}
+		add_action(
+			'admin_menu',
+			function() {
+				$result = remove_menu_page( $this->getMenuSlug() );
+
+				if ( ! $result ) {
+					throw new \Exception();
+				}
+			}
+		);
 
 		return $this;
 	}

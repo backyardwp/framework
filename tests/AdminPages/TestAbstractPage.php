@@ -1,6 +1,6 @@
 <?php // phpcs:ignore WordPress.Files.FileName
 /**
- * Backyard forms test.
+ * Backyard pages test.
  *
  * @package   backyard-foundation
  * @author    Sematico LTD <hello@sematico.com>
@@ -12,6 +12,13 @@
 namespace Backyard\Tests\AdminPages;
 
 use Backyard\AdminPages\AbstractPage;
+use Backyard\Application;
+use Backyard\Exceptions\NonRenderableException;
+use Backyard\Plugin;
+use Backyard\Templates\Engine;
+use Backyard\Templates\TemplatesServiceProvider;
+use Backyard\Views\View;
+use stdClass;
 
 class TestAbstractPage extends \WP_UnitTestCase {
 
@@ -63,5 +70,33 @@ class TestAbstractPage extends \WP_UnitTestCase {
 		$this->assertNull( $this->stub->getMenuSlug() );
 		$this->assertSame( $this->stub, $this->stub->setMenuSlug( $value ) );
 		$this->assertSame( $value, $this->stub->getMenuSlug() );
+	}
+
+	public function testViewAttachmentException() {
+
+		$this->expectException( NonRenderableException::class );
+
+		$this->stub->attachView( WrongView::class );
+
+	}
+
+	public function testViewAttachment() {
+
+		$this->stub->attachView( PageView::class );
+
+		$this->assertInstanceOf( View::class, $this->stub->getView() );
+
+		$this->assertSame( 'test', $this->stub->getView()->render() );
+
+	}
+
+}
+
+class WrongView {}
+
+class PageView extends View {
+
+	public function render() {
+		return 'test';
 	}
 }
